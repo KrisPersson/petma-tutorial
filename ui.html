@@ -16,23 +16,23 @@ document.getElementById('cancel').onclick = () => {
 
 </script> -->
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css">
+<link rel="stylesheet" href="./node_modules/figma-plugin-ds/dist/figma-plugin-ds.css">
 <style>
   body {
-        padding: 2em;
-    }
-    div {
-        margin: 1em;
-    }
-    input {
-        display: block;
-    }
+    padding: 2em;
+  }
+  div {
+    margin: 1em;
+  }
+  input {
+    display: block;
+  }
 </style>
 
 <h1>Petma Tutorial UI</h1>
 <div>
   <label for="username">Username</label>
-  <input type="text" class="input__field" id="username">
+  <input type="text" className="input__field" id="username">
   <label for="name">Name</label>
   <input type="text" class="input__field" id="name">
   <label for="description">Description</label>
@@ -44,7 +44,7 @@ document.getElementById('cancel').onclick = () => {
 </div>
 <div class="radio">
   <label for="no-image">No Image</label>
-  <input type="radio" class="radio__button" name="variantGroup" id="no-image" value="1">
+  <input type="radio" class="radio__button" name="variantGroup" id="no-image" value="1" checked>
   <label for="single-image">Single Image</label>
   <input type="radio" class="radio__button" name="variantGroup" id="single-image" value="2">
   <label for="carousel">Carousel</label>
@@ -59,15 +59,9 @@ document.getElementById('cancel').onclick = () => {
     const username = document.getElementById('username').value
     const description = document.getElementById('description').value
     const darkModeState = document.getElementById('dark-mode-on').checked
-    const imageVariant = document.querySelector('input[name="variantGroup"]:checked').value
+    const imageVariant = document.querySelector('input[name="variantGroup"]:checked')?.value
 
-    console.log(name)
-    console.log(username)
-    console.log(description)
-    console.log(darkModeState)
-    console.log(imageVariant)
-
-
+    parent.postMessage({ pluginMessage: { name, username, description, darkModeState, imageVariant } }, '*')
 
   }
 </script>

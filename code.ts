@@ -35,3 +35,30 @@
 
 figma.showUI(__html__)
 figma.ui.resize(500, 500)
+figma.ui.onmessage = async msg => { 
+  console.log(msg)
+  const { name, username, description, darkModeState, imageVariant } = msg
+
+  const variantName = `Image=${imageVariant == 2 ? "single" : imageVariant == 3 ? "carousel" : "none"}, Dark mode=${darkModeState}` 
+
+  const postComponentSet = figma.root.findOne(node => node.type == "COMPONENT_SET" && node.name == "post") as ComponentSetNode
+  const selectedVariant = postComponentSet.findOne(node => node.type == "COMPONENT" && node.name == variantName) as ComponentNode;
+
+  const nodes: SceneNode[] = []
+
+  const newPost = selectedVariant.createInstance()
+  const templateName = newPost.findOne(node => node.type == "TEXT" && node.name == "displayName") as TextNode;
+  const templateUsername = newPost.findOne(node => node.type == "TEXT" && node.name == "@username") as TextNode;
+  const templateDescription = newPost.findOne(node => node.type == "TEXT" && node.name == "description") as TextNode;
+
+  await figma.loadFontAsync({ family: "Rubik", style: "Regular" })
+
+  templateName.characters = name
+  templateUsername.characters = username[0] === '@' ? username : '@' + username
+  templateDescription.characters = description
+
+  nodes.push(newPost)
+  figma.viewport.scrollAndZoomIntoView(nodes);
+
+  figma.closePlugin()
+}
